@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 
+const BASE_URL = "https://laundy-backend.onrender.com/api";
+
 const PriceList = () => {
   const [cart, setCart] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")); // logged-in user
+  const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
 
-  // Services organized by category
   const servicesByCategory = {
     Clothing: [
       { name: "Shirt (Wash & Iron)", price: 50, popular: false },
@@ -29,48 +30,76 @@ const PriceList = () => {
     ],
   };
 
-  // Fetch cart from backend
-  const fetchCart = async () => {
-    if (!userId) return;
-    const res = await fetch(`http://localhost:5000/api/cart/${userId}`);
-    const data = await res.json();
-    setCart(data);
-  };
-
+  // Fetch cart initially
   useEffect(() => {
-    fetchCart();
+    if (!userId) return;
+    fetch(`${BASE_URL}/cart/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setCart(data))
+      .catch((err) => console.error(err));
   }, [userId]);
 
   const addToCart = async (item) => {
     if (!userId) return alert("Please login first");
-    await fetch(`http://localhost:5000/api/cart`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, service: item.name, price: item.price, quantity: 1 }),
+
+    // Optimistic UI update
+    setCart((prev) => {
+      const existing = prev.find((c) => c.service === item.name);
+      if (existing) {
+        return prev.map((c) =>
+          c.service === item.name ? { ...c, quantity: c.quantity + 1 } : c
+        );
+      } else {
+        return [...prev, { service: item.name, price: item.price, quantity: 1 }];
+      }
     });
-    fetchCart();
+
+    // Update backend
+    try {
+      await fetch(`${BASE_URL}/cart`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, service: item.name, price: item.price, quantity: 1 }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const removeFromCart = async (service) => {
+    setCart((prev) => prev.filter((c) => c.service !== service));
     if (!userId) return;
-    await fetch(`http://localhost:5000/api/cart/${userId}/${service}`, {
-      method: "DELETE",
-    });
-    fetchCart();
+    try {
+      await fetch(`${BASE_URL}/cart/${userId}/${service}`, { method: "DELETE" });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const updateQuantity = async (service, quantity) => {
-    if (!userId) return;
-    // Remove item if quantity < 1
-    if (quantity < 1) return removeFromCart(service);
+  const updateQuantity = async (service, newQty) => {
+    const currentItem = cart.find((c) => c.service === service);
+    if (!currentItem) return;
+    if (newQty < 1) return removeFromCart(service);
 
-    // Update quantity via POST (simpler approach)
-    await fetch(`http://localhost:5000/api/cart`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, service, price: cart.find(c => c.service === service).price, quantity: quantity - cart.find(c => c.service === service).quantity }),
-    });
-    fetchCart();
+    // Optimistic UI update
+    setCart((prev) =>
+      prev.map((c) => (c.service === service ? { ...c, quantity: newQty } : c))
+    );
+
+    try {
+      await fetch(`${BASE_URL}/cart`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          service,
+          price: currentItem.price,
+          quantity: newQty - currentItem.quantity,
+        }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const getCartTotal = () =>
@@ -78,20 +107,15 @@ const PriceList = () => {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
-        Price List
-      </h1>
+      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">Price List</h1>
 
       {Object.entries(servicesByCategory).map(([category, services]) => (
         <section key={category} className="mb-12">
-          <h2 className="text-3xl font-semibold mb-8 text-blue-600 border-b-2 border-blue-100 pb-2">
-            {category}
-          </h2>
+          <h2 className="text-3xl font-semibold mb-8 text-blue-600 border-b-2 border-blue-100 pb-2">{category}</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((item) => {
               const inCart = cart.find((c) => c.service === item.name);
-
               return (
                 <div
                   key={item.name}
@@ -151,9 +175,7 @@ const PriceList = () => {
           <ul className="space-y-2 max-h-48 overflow-y-auto">
             {cart.map((item) => (
               <li key={item.service} className="flex justify-between items-center">
-                <span>
-                  {item.service} x {item.quantity}
-                </span>
+                <span>{item.service} x {item.quantity}</span>
                 <span>₹{item.price * item.quantity}</span>
               </li>
             ))}

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, A11y } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import React, { useState, useEffect, useMemo } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -16,14 +16,13 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       setCount(Math.floor(progress * end));
-      
+
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
       }
     };
 
     animationFrame = requestAnimationFrame(animate);
-    
     return () => cancelAnimationFrame(animationFrame);
   }, [end, duration]);
 
@@ -32,56 +31,28 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
 
 const Dashboard = () => {
   const [isVisible, setIsVisible] = useState(false);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  const sliderImages = useMemo(() => [
-    {
-      src: "https://eu-images.contentstack.com/v3/assets/blte6b9e99033a702bd/blt7e5c15dd5c6fb1a3/67cacb6c91d4b6c9af49e7e3/Top_Shape_1.jpg",
-      alt: "Laundry Service"
-    },
-    {
-      src: "https://tumbledry.in/wp-content/uploads/2022/02/Colorful-Laundry-Clothes.jpg",
-      alt: "Colorful Laundry"
-    },
-    {
-      src: "https://hips.hearstapps.com/hmg-prod/images/gh-closet-organization-1583437747.png",
-      alt: "Organized Closet"
-    },
-    {
-      src: "https://cdn.pixabay.com/photo/2014/08/08/20/54/laundry-413688_1280.jpg",
-      alt: "Laundry Basket"
-    },
-    {
-      src: "https://i.pinimg.com/736x/0a/bf/b9/0abfb9a5e38519cd908dcc4a4392e743.jpg",
-      alt: "Shoe Cleaning"
-    }
-  ], []);
+  const sliderImages = useMemo(
+    () => [
+      { src: "https://eu-images.contentstack.com/v3/assets/blte6b9e99033a702bd/blt7e5c15dd5c6fb1a3/67cacb6c91d4b6c9af49e7e3/Top_Shape_1.jpg", alt: "Laundry Service" },
+      { src: "https://tumbledry.in/wp-content/uploads/2022/02/Colorful-Laundry-Clothes.jpg", alt: "Colorful Laundry" },
+      { src: "https://hips.hearstapps.com/hmg-prod/images/gh-closet-organization-1583437747.png", alt: "Organized Closet" },
+      { src: "https://cdn.pixabay.com/photo/2014/08/08/20/54/laundry-413688_1280.jpg", alt: "Laundry Basket" },
+      { src: "https://i.pinimg.com/736x/0a/bf/b9/0abfb9a5e38519cd908dcc4a4392e743.jpg", alt: "Shoe Cleaning" },
+    ],
+    []
+  );
 
   const services = [
-    {
-      title: "Wash & Fold",
-      description: "Professional washing and careful folding of your clothes",
-      icon: "🧺"
-    },
-    {
-      title: "Dry Cleaning",
-      description: "Expert dry cleaning for delicate and special garments",
-      icon: "👔"
-    },
-    {
-      title: "Ironing",
-      description: "Crisp ironing for a polished look",
-      icon: "♨️"
-    },
-    {
-      title: "Stain Removal",
-      description: "Specialized treatment for tough stains",
-      icon: "✨"
-    }
+    { title: "Wash & Fold", description: "Professional washing and careful folding of your clothes", icon: "🧺" },
+    { title: "Dry Cleaning", description: "Expert dry cleaning for delicate and special garments", icon: "👔" },
+    { title: "Ironing", description: "Crisp ironing for a polished look", icon: "♨️" },
+    { title: "Stain Removal", description: "Specialized treatment for tough stains", icon: "✨" },
   ];
 
   return (
@@ -105,13 +76,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Services Preview */}
+        {/* Services */}
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {services.map((service, index) => (
-            <div 
-              key={index} 
-              className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
+            <div key={index} className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
               <div className="text-4xl mb-4">{service.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
               <p className="text-gray-600">{service.description}</p>
@@ -126,35 +94,20 @@ const Dashboard = () => {
             modules={[Navigation, Pagination, Autoplay, A11y]}
             spaceBetween={20}
             slidesPerView={1}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 }
-            }}
+            breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
             loop={true}
-            autoplay={{ 
-              delay: 3500, 
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true 
-            }}
+            autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
             navigation
             pagination={{ clickable: true }}
-            a11y={{ enabled: true, prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' }}
+            a11y={{ enabled: true }}
             className="pb-12"
           >
             {sliderImages.map((image, index) => (
               <SwiperSlide key={index}>
                 <div className="relative group overflow-hidden rounded-xl">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    loading="lazy"
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
+                  <img src={image.src} alt={image.alt} loading="lazy" className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
-                      {image.alt}
-                    </span>
+                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">{image.alt}</span>
                   </div>
                 </div>
               </SwiperSlide>
@@ -168,15 +121,11 @@ const Dashboard = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="p-6">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {isVisible ? <AnimatedCounter end={10} /> : "0"}+
-              </div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{isVisible ? <AnimatedCounter end={10} /> : "0"}+</div>
               <div className="text-gray-600">Happy Customers</div>
             </div>
             <div className="p-6">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {isVisible ? <AnimatedCounter end={50} /> : "0"}+
-              </div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{isVisible ? <AnimatedCounter end={50} /> : "0"}+</div>
               <div className="text-gray-600">Items Cleaned</div>
             </div>
             <div className="p-6">
@@ -184,9 +133,7 @@ const Dashboard = () => {
               <div className="text-gray-600">Customer Support</div>
             </div>
             <div className="p-6">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {isVisible ? <AnimatedCounter end={98} /> : "0"}%
-              </div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{isVisible ? <AnimatedCounter end={98} /> : "0"}%</div>
               <div className="text-gray-600">Satisfaction Rate</div>
             </div>
           </div>
