@@ -43,7 +43,7 @@ const Dashboard = () => {
       { src: "https://tumbledry.in/wp-content/uploads/2022/02/Colorful-Laundry-Clothes.jpg", alt: "Colorful Laundry" },
       { src: "https://hips.hearstapps.com/hmg-prod/images/gh-closet-organization-1583437747.png", alt: "Organized Closet" },
       { src: "https://cdn.pixabay.com/photo/2014/08/08/20/54/laundry-413688_1280.jpg", alt: "Laundry Basket" },
-      { src: "https://i.pinimg.com/736x/0a/bf/b9/0abfb9a5e38519cd908dcc4a4392e743.jpg", alt: "Shoe Cleaning" },
+      { src: "https://laundrikart.com/wp-content/uploads/2024/05/Shoe-Dryclean-Laundrikart.webp", alt: "Shoe Cleaning" },
     ],
     []
   );
