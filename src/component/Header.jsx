@@ -10,7 +10,7 @@ const Header = () => {
   const { cartCount } = useCart();
 
   useEffect(() => {
-    setIsMenuOpen(false);
+    setIsMenuOpen(false); // close mobile menu on route change
   }, [location]);
 
   const navItems = [
@@ -22,27 +22,29 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="bg-blue-50 h-10 flex items-center justify-center gap-2 px-4">
-        <CgSmartHomeWashMachine className="text-blue-600 h-5 w-5" />
-        <span className="text-blue-800 text-sm font-medium">
-          Hassle-free Laundry at Your Doorstep
-        </span>
+      {/* Top Info Bar */}
+      <div className="bg-blue-50 h-8 flex items-center justify-center text-xs md:text-sm text-blue-800">
+        <CgSmartHomeWashMachine className="text-blue-600 h-4 w-4 mr-1" />
+        Hassle-free Laundry at Your Doorstep
       </div>
 
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-        <Link to="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg sm:text-xl">
+      {/* Main Header */}
+      <div className="container mx-auto flex items-center justify-between py-3 px-4 md:px-8">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl">
             LH
           </div>
           <div className="flex flex-col">
-            <h1 className="font-bold text-lg sm:text-xl md:text-2xl text-gray-800 hover:text-blue-600 transition-colors">
+            <h1 className="text-base md:text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
               Laundry Hamper
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500">Fresh & Clean</p>
+            <p className="text-xs md:text-sm text-gray-500">Fresh & Clean</p>
           </div>
         </Link>
 
-        <nav className="hidden md:flex gap-6 font-medium text-gray-700 absolute left-1/2 transform -translate-x-1/2">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex gap-6 font-medium text-gray-700">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -52,95 +54,79 @@ const Header = () => {
               }`}
             >
               {item.label}
-              {location.pathname === item.path && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded"></span>
-              )}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-2 sm:gap-4">
+        {/* Auth & Cart (Desktop) */}
+        <div className="hidden md:flex items-center gap-3">
           <Link
             to="/register"
-            className="bg-blue-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 text-sm md:text-base"
           >
             Register
           </Link>
           <Link
             to="/login"
-            className="border border-blue-600 text-blue-600 px-3 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium"
+            className="border border-blue-600 text-blue-600 px-3 py-1.5 rounded-md hover:bg-blue-600 hover:text-white text-sm md:text-base"
           >
             Login
           </Link>
-
           <Link
             to="/cart"
-            className="relative px-3 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-blue-50 transition flex items-center justify-center text-blue-600 font-medium"
+            className="relative px-3 py-1.5 rounded-md hover:bg-blue-50 text-blue-600 font-medium flex items-center justify-center"
           >
             🛒
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 {cartCount}
               </span>
             )}
           </Link>
         </div>
 
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-gray-700"
+          className="md:hidden text-gray-700 p-2"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
         </button>
       </div>
 
-      <div
-        className={`md:hidden bg-white border-t border-gray-200 transition-transform duration-300 ${
-          isMenuOpen ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        <nav className="flex flex-col gap-2 px-4 py-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors text-center ${
-                location.pathname === item.path ? "bg-blue-50 text-blue-600 font-semibold" : ""
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <nav className="flex flex-col px-4 py-4 gap-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`py-2 px-3 rounded-md hover:bg-blue-50 text-gray-700 ${
+                  location.pathname === item.path ? "bg-blue-50 text-blue-600 font-semibold" : ""
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
 
-          <Link
-            to="/cart"
-            className="relative py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center"
-          >
-            🛒
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
-            <span className="ml-2 font-medium text-blue-600">Cart</span>
-          </Link>
-
-          <div className="flex flex-col sm:flex-row gap-2 mt-3 border-t border-gray-200 pt-3">
-            <Link
-              to="/register"
-              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center"
-            >
-              Register
-            </Link>
-            <Link
-              to="/login"
-              className="flex-1 border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium text-center"
-            >
-              Login
-            </Link>
-          </div>
-        </nav>
-      </div>
+            <div className="flex flex-col gap-2 mt-3">
+              <Link
+                to="/register"
+                className="w-full bg-blue-600 text-white py-2 rounded-md text-center"
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className="w-full border border-blue-600 text-blue-600 py-2 rounded-md text-center hover:bg-blue-600 hover:text-white"
+              >
+                Login
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
