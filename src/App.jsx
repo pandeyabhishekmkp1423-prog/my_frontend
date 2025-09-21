@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+
+// Make sure these match **exact file names** in your project
 import Dashboard from "./pages/Dashboard";
 import PriceList from "./pages/PriceList";
 import Header from "./component/Header";
@@ -7,13 +9,15 @@ import Footer from "./component/Footer";
 import LoadingSpinner from "./component/LoadingSpinner";
 import { CartProvider } from "./pages/PriceListContext";
 
+// Lazy-loaded pages
 const Contact = React.lazy(() => import("./pages/Contact"));
 const About = React.lazy(() => import("./pages/About"));
-const CartPage = React.lazy(() => import("./pages/Cart"));
+const CartPage = React.lazy(() => import("./pages/Cart")); // check file is Cart.jsx
 const Checkout = React.lazy(() => import("./pages/Checkout"));
 const Login = React.lazy(() => import("./pages/Login"));
 const Register = React.lazy(() => import("./pages/Register"));
 
+// Layout component
 const Layout = () => (
   <div className="min-h-screen flex flex-col">
     <Header />
@@ -26,6 +30,7 @@ const Layout = () => (
   </div>
 );
 
+// Router configuration
 const router = createBrowserRouter([
   {
     path: "/",
