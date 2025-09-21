@@ -1,10 +1,12 @@
 // src/pages/Dashboard.jsx
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import PriceList from "./PriceList"; // Import the actual PriceList
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -25,6 +27,8 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
 
 const Dashboard = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
+  const priceRef = useRef(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 500);
@@ -50,6 +54,13 @@ const Dashboard = () => {
     { title: "Stain Removal", description: "Specialized treatment for tough stains", icon: "✨" },
   ];
 
+  const handleSchedulePickup = () => navigate("/checkout");
+  const handleLearnMore = () => {
+    if (priceRef.current) {
+      priceRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
@@ -61,16 +72,22 @@ const Dashboard = () => {
           Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105">
+          <button
+            onClick={handleSchedulePickup}
+            className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105"
+          >
             Schedule Pickup
           </button>
-          <button className="border border-blue-600 text-blue-600 px-8 py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition">
+          <button
+            onClick={handleLearnMore}
+            className="border border-blue-600 text-blue-600 px-8 py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition"
+          >
             Learn More
           </button>
         </div>
       </section>
 
-      {/* Services */}
+      {/* Services Cards */}
       <section className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 px-4">
         {services.map((s, idx) => (
           <div
@@ -143,6 +160,11 @@ const Dashboard = () => {
             <div className="text-gray-600">Satisfaction Rate</div>
           </div>
         </div>
+      </section>
+
+      {/* Price List Section */}
+      <section ref={priceRef}>
+        <PriceList />
       </section>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
-// Make sure these match **exact file names** in your project
+// Ensure these imports match the **exact filenames** in your src/pages and src/component folders
 import Dashboard from "./pages/Dashboard";
 import PriceList from "./pages/PriceList";
 import Header from "./component/Header";
@@ -12,7 +12,7 @@ import { CartProvider } from "./pages/PriceListContext";
 // Lazy-loaded pages
 const Contact = React.lazy(() => import("./pages/Contact"));
 const About = React.lazy(() => import("./pages/About"));
-const CartPage = React.lazy(() => import("./pages/Cart")); // check file is Cart.jsx
+const CartPage = React.lazy(() => import("./pages/Cart")); // Ensure the file is exactly Cart.jsx
 const Checkout = React.lazy(() => import("./pages/Checkout"));
 const Login = React.lazy(() => import("./pages/Login"));
 const Register = React.lazy(() => import("./pages/Register"));
