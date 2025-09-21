@@ -1,3 +1,4 @@
+// src/pages/Dashboard.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
@@ -52,66 +53,100 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
-      <section className="py-12 md:py-16 px-4 md:px-8 text-center">
-        <h1 className="text-3xl md:text-5xl font-bold mb-3 md:mb-4 text-gray-800">
-          Welcome to <span className="text-blue-600">Laundry Hamper</span>
-        </h1>
-        <p className="text-sm md:text-lg text-gray-600 max-w-xl mx-auto mb-6 md:mb-8">
-          Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-          <button className="bg-blue-600 text-white px-6 py-2 md:px-8 md:py-3 rounded-full text-sm md:text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105">
+      <section className="py-12 px-4 sm:py-16 sm:px-8 text-center flex flex-col items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-3">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl sm:text-2xl">
+            LH
+          </div>
+          <div>
+            <h1 className="text-3xl sm:text-5xl font-bold text-gray-800">
+              Welcome to <span className="text-blue-600">Laundry Hamper</span>
+            </h1>
+            <p className="text-gray-600 mt-2 sm:mt-4 text-sm sm:text-lg max-w-xl mx-auto">
+              Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 mt-4">
+          <button className="bg-blue-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105">
             Schedule Pickup
           </button>
-          <button className="border border-blue-600 text-blue-600 px-6 py-2 md:px-8 md:py-3 rounded-full text-sm md:text-lg font-medium hover:bg-blue-600 hover:text-white transition">
+          <button className="border border-blue-600 text-blue-600 px-6 sm:px-8 py-2 sm:py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition">
             Learn More
           </button>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 px-4">
+      <section className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 px-4">
         {services.map((s, idx) => (
-          <div key={idx} className="bg-white p-4 md:p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-            <div className="text-4xl md:text-5xl mb-2 md:mb-4 animate-bounce">{s.icon}</div>
-            <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">{s.title}</h3>
-            <p className="text-gray-600 text-sm md:text-base">{s.description}</p>
+          <div key={idx} className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 motion-reduce:transition-none">
+            <div className="text-5xl mb-4 animate-bounce">{s.icon}</div>
+            <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
+            <p className="text-gray-600">{s.description}</p>
           </div>
         ))}
       </section>
 
       {/* Image Slider */}
       <section className="container mx-auto mb-12 px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-800">Our Work</h2>
+        <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Our Work</h2>
         <Swiper
           modules={[Navigation, Pagination, Autoplay, A11y]}
-          spaceBetween={15}
+          spaceBetween={20}
           slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            1024: { slidesPerView: 4 },
-          }}
+          breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
           loop
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
           navigation
           pagination={{ clickable: true }}
         >
           {sliderImages.map((img, idx) => (
             <SwiperSlide key={idx}>
-              <div className="relative overflow-hidden rounded-xl group h-48 md:h-64">
+              <div className="relative overflow-hidden rounded-xl group">
                 <img
                   src={img.src}
                   alt={img.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                  className="w-full h-64 sm:h-52 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition duration-300">
-                  <span className="text-white opacity-0 group-hover:opacity-100 font-medium">{img.alt}</span>
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                  <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">
+                    {img.alt}
+                  </span>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="p-6">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {isVisible ? <AnimatedCounter end={10} /> : "0"}+
+            </div>
+            <div className="text-gray-600">Happy Customers</div>
+          </div>
+          <div className="p-6">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {isVisible ? <AnimatedCounter end={50} /> : "0"}+
+            </div>
+            <div className="text-gray-600">Items Cleaned</div>
+          </div>
+          <div className="p-6">
+            <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+            <div className="text-gray-600">Support</div>
+          </div>
+          <div className="p-6">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {isVisible ? <AnimatedCounter end={98} /> : "0"}%
+            </div>
+            <div className="text-gray-600">Satisfaction Rate</div>
+          </div>
+        </div>
       </section>
     </div>
   );

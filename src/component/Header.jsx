@@ -10,7 +10,7 @@ const Header = () => {
   const { cartCount } = useCart();
 
   useEffect(() => {
-    setIsMenuOpen(false); // close mobile menu on route change
+    setIsMenuOpen(false);
   }, [location]);
 
   const navItems = [
@@ -21,30 +21,32 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white shadow transition-shadow duration-300">
       {/* Top Info Bar */}
-      <div className="bg-blue-50 h-8 flex items-center justify-center text-xs md:text-sm text-blue-800">
-        <CgSmartHomeWashMachine className="text-blue-600 h-4 w-4 mr-1" />
-        Hassle-free Laundry at Your Doorstep
+      <div className="bg-blue-50 h-10 flex items-center justify-center gap-2 px-4">
+        <CgSmartHomeWashMachine className="text-blue-600 h-5 w-5" />
+        <span className="text-blue-800 text-sm md:text-base font-medium">
+          Hassle-free Laundry at Your Doorstep
+        </span>
       </div>
 
       {/* Main Header */}
-      <div className="container mx-auto flex items-center justify-between py-3 px-4 md:px-8">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
             LH
           </div>
           <div className="flex flex-col">
-            <h1 className="text-base md:text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
+            <h1 className="font-bold text-xl md:text-2xl text-gray-800 hover:text-blue-600 transition-colors">
               Laundry Hamper
             </h1>
-            <p className="text-xs md:text-sm text-gray-500">Fresh & Clean</p>
+            <p className="text-xs text-gray-500">Fresh & Clean</p>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-6 font-medium text-gray-700">
+        <nav className="hidden md:flex gap-8 absolute left-1/2 transform -translate-x-1/2 font-medium text-gray-700">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -54,31 +56,35 @@ const Header = () => {
               }`}
             >
               {item.label}
+              {location.pathname === item.path && (
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded"></span>
+              )}
             </Link>
           ))}
         </nav>
 
-        {/* Auth & Cart (Desktop) */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Right Side: Auth & Cart */}
+        <div className="hidden md:flex items-center gap-4">
           <Link
             to="/register"
-            className="bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 text-sm md:text-base"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Register
           </Link>
           <Link
             to="/login"
-            className="border border-blue-600 text-blue-600 px-3 py-1.5 rounded-md hover:bg-blue-600 hover:text-white text-sm md:text-base"
+            className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium"
           >
             Login
           </Link>
+
           <Link
             to="/cart"
-            className="relative px-3 py-1.5 rounded-md hover:bg-blue-50 text-blue-600 font-medium flex items-center justify-center"
+            className="relative flex items-center justify-center px-3 py-1.5 rounded-md hover:bg-blue-50 text-blue-600 font-medium"
           >
-            🛒
+            <span className="text-xl md:text-2xl">🛒</span>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -87,7 +93,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-700 p-2"
+          className="md:hidden p-2 text-gray-700"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
@@ -95,38 +101,54 @@ const Header = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
-          <nav className="flex flex-col px-4 py-4 gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`py-2 px-3 rounded-md hover:bg-blue-50 text-gray-700 ${
-                  location.pathname === item.path ? "bg-blue-50 text-blue-600 font-semibold" : ""
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+      <div
+        className={`md:hidden bg-white border-t border-gray-200 transition-transform duration-300 ${
+          isMenuOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <nav className="flex flex-col gap-3 px-4 py-4">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors ${
+                location.pathname === item.path ? "bg-blue-50 text-blue-600 font-semibold" : ""
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
 
-            <div className="flex flex-col gap-2 mt-3">
-              <Link
-                to="/register"
-                className="w-full bg-blue-600 text-white py-2 rounded-md text-center"
-              >
-                Register
-              </Link>
-              <Link
-                to="/login"
-                className="w-full border border-blue-600 text-blue-600 py-2 rounded-md text-center hover:bg-blue-600 hover:text-white"
-              >
-                Login
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
+          {/* Mobile Auth & Cart */}
+          <Link
+            to="/cart"
+            className="relative py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center"
+          >
+            <span className="text-lg">🛒</span>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+            <span className="ml-2 font-medium text-blue-600">Cart</span>
+          </Link>
+
+          <div className="flex gap-3 pt-3 border-t border-gray-200 mt-3">
+            <Link
+              to="/register"
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center"
+            >
+              Register
+            </Link>
+            <Link
+              to="/login"
+              className="flex-1 border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium text-center"
+            >
+              Login
+            </Link>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 };
