@@ -1,4 +1,3 @@
-// src/component/Header.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CgSmartHomeWashMachine } from "react-icons/cg";
@@ -11,7 +10,7 @@ const Header = () => {
   const { cartCount } = useCart();
 
   useEffect(() => {
-    setIsMenuOpen(false);
+    setIsMenuOpen(false); // close menu on navigation
   }, [location]);
 
   const navItems = [
@@ -22,13 +21,11 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white shadow">
       {/* Top Info Bar */}
-      <div className="bg-blue-50 h-10 flex items-center justify-center gap-2 px-4">
+      <div className="bg-blue-50 h-10 flex items-center justify-center gap-2 px-4 text-sm md:text-base font-medium text-blue-800">
         <CgSmartHomeWashMachine className="text-blue-600 h-5 w-5" />
-        <span className="text-blue-800 text-sm md:text-base font-medium">
-          Hassle-free Laundry at Your Doorstep
-        </span>
+        Hassle-free Laundry at Your Doorstep
       </div>
 
       {/* Main Header */}
@@ -46,16 +43,14 @@ const Header = () => {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-6 font-medium text-gray-700">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-8 font-medium text-gray-700">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               className={`relative hover:text-blue-600 transition-colors ${
-                location.pathname === item.path
-                  ? "text-blue-600 font-semibold"
-                  : ""
+                location.pathname === item.path ? "text-blue-600 font-semibold" : ""
               }`}
             >
               {item.label}
@@ -67,7 +62,7 @@ const Header = () => {
         </nav>
 
         {/* Desktop Auth & Cart */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           <Link
             to="/register"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -93,7 +88,7 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Menu Button */}
         <button
           className="md:hidden p-2 text-gray-700"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -102,28 +97,26 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Nav */}
       <div
         className={`md:hidden bg-white border-t border-gray-200 transition-transform duration-300 ${
-          isMenuOpen ? "translate-y-0" : "-translate-y-full"
+          isMenuOpen ? "max-h-screen py-4" : "max-h-0 overflow-hidden"
         }`}
       >
-        <nav className="flex flex-col gap-2 px-4 py-4">
+        <nav className="flex flex-col gap-3 px-4">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
+              onClick={() => setIsMenuOpen(false)}
               className={`py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors ${
-                location.pathname === item.path
-                  ? "bg-blue-50 text-blue-600 font-semibold"
-                  : ""
+                location.pathname === item.path ? "bg-blue-50 text-blue-600 font-semibold" : ""
               }`}
             >
               {item.label}
             </Link>
           ))}
 
-          {/* Mobile Auth & Cart */}
           <Link
             to="/cart"
             className="relative py-2 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center"
@@ -137,16 +130,16 @@ const Header = () => {
             <span className="ml-2 font-medium text-blue-600">Cart</span>
           </Link>
 
-          <div className="flex flex-col gap-2 pt-3 border-t border-gray-200 mt-3">
+          <div className="flex gap-3 pt-3 border-t border-gray-200 mt-3">
             <Link
               to="/register"
-              className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center"
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center"
             >
               Register
             </Link>
             <Link
               to="/login"
-              className="w-full border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium text-center"
+              className="flex-1 border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors font-medium text-center"
             >
               Login
             </Link>
