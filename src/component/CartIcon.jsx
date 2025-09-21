@@ -1,7 +1,6 @@
-// src/component/CartIcon.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../pages/PriceList";
+import { useCart } from "../pages/CartContext";
 
 const CartIcon = () => {
   const { cartCount } = useCart();
