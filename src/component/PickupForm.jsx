@@ -31,11 +31,13 @@ const PickupForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 md:px-8">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Schedule a Pickup</h1>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
+        Schedule a Pickup
+      </h1>
       <form
         onSubmit={handleSubmit}
-        className="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-md space-y-4"
+        className="max-w-md sm:max-w-lg mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-md space-y-4 sm:space-y-6"
       >
         <input
           type="text"
@@ -44,7 +46,7 @@ const PickupForm = () => {
           onChange={handleChange}
           placeholder="Your Name"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="email"
@@ -53,7 +55,7 @@ const PickupForm = () => {
           onChange={handleChange}
           placeholder="Your Email"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="text"
@@ -62,7 +64,7 @@ const PickupForm = () => {
           onChange={handleChange}
           placeholder="Pickup Address"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="date"
@@ -70,7 +72,7 @@ const PickupForm = () => {
           value={formData.date}
           onChange={handleChange}
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="text"
@@ -79,11 +81,11 @@ const PickupForm = () => {
           onChange={handleChange}
           placeholder="Items (comma separated)"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-full hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-3 sm:py-4 rounded-full hover:bg-blue-700 transition text-lg sm:text-xl font-medium"
         >
           Place Order
         </button>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules"; // ✅ Correct imports
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -63,23 +63,23 @@ const Dashboard = () => {
       <CartIcon />
 
       {/* Hero Section */}
-      <section className="py-16 px-4 md:px-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
+      <section className="py-12 md:py-16 px-4 md:px-8 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-gray-800">
           Welcome to <span className="text-blue-600">Laundry Hamper</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+        <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8">
           Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <button
             onClick={() => navigate("/pickup-form")}
-            className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105"
+            className="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105"
           >
             Schedule Pickup
           </button>
           <button
             onClick={() => navigate("/learn-more")}
-            className="border border-blue-600 text-blue-600 px-8 py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition"
+            className="border border-blue-600 text-blue-600 px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-medium hover:bg-blue-600 hover:text-white transition"
           >
             Learn More
           </button>
