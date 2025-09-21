@@ -2,11 +2,11 @@ import React from "react";
 import { useCart } from "./CartContext";
 import { Link } from "react-router-dom";
 
-const CartPage = () => {
+const Cart = () => {
   const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } =
     useCart();
 
-  if (cart.length === 0) {
+  if (!cart || cart.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-700">
         <p className="text-xl mb-4">🛒 Your cart is empty.</p>
@@ -108,4 +108,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default Cart;
