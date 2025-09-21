@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CgSmartHomeWashMachine } from "react-icons/cg";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import { useCart } from "../pages/PriceListContext";
+import { useCart } from "../pages/CartContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

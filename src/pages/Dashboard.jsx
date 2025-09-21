@@ -1,10 +1,14 @@
 // src/pages/Dashboard.jsx
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules"; // ✅ Correct imports
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
+import { useCart } from "./CartContext";
+import CartIcon from "../component/CartIcon";
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -25,6 +29,8 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
 
 const Dashboard = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 500);
@@ -48,37 +54,40 @@ const Dashboard = () => {
     { title: "Dry Cleaning", description: "Expert dry cleaning for delicate garments", icon: "👔" },
     { title: "Ironing", description: "Crisp ironing for a polished look", icon: "♨️" },
     { title: "Stain Removal", description: "Specialized treatment for tough stains", icon: "✨" },
+    { title: "Shoe Cleaning", description: "Thorough cleaning for shoes & sneakers", icon: "👟" },
+    { title: "Curtain Wash", description: "Deep cleaning for curtains & drapes", icon: "🪟" },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white relative">
+      <CartIcon />
+
       {/* Hero Section */}
-      <section className="py-12 px-4 sm:py-16 sm:px-8 text-center flex flex-col items-center justify-center gap-4">
-        <div className="flex items-center justify-center gap-3">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl sm:text-2xl">
-            LH
-          </div>
-          <div>
-            <h1 className="text-3xl sm:text-5xl font-bold text-gray-800">
-              Welcome to <span className="text-blue-600">Laundry Hamper</span>
-            </h1>
-            <p className="text-gray-600 mt-2 sm:mt-4 text-sm sm:text-lg max-w-xl mx-auto">
-              Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
-            </p>
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 mt-4">
-          <button className="bg-blue-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105">
+      <section className="py-16 px-4 md:px-8 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
+          Welcome to <span className="text-blue-600">Laundry Hamper</span>
+        </h1>
+        <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+          Fresh, clean, and perfectly folded laundry—delivered to your doorstep.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            onClick={() => navigate("/pickup-form")}
+            className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md hover:bg-blue-700 transition transform hover:scale-105"
+          >
             Schedule Pickup
           </button>
-          <button className="border border-blue-600 text-blue-600 px-6 sm:px-8 py-2 sm:py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition">
+          <button
+            onClick={() => navigate("/learn-more")}
+            className="border border-blue-600 text-blue-600 px-8 py-3 rounded-full text-lg font-medium hover:bg-blue-600 hover:text-white transition"
+          >
             Learn More
           </button>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 px-4">
+      <section className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 px-4">
         {services.map((s, idx) => (
           <div key={idx} className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 motion-reduce:transition-none">
             <div className="text-5xl mb-4 animate-bounce">{s.icon}</div>
@@ -92,7 +101,7 @@ const Dashboard = () => {
       <section className="container mx-auto mb-12 px-4">
         <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Our Work</h2>
         <Swiper
-          modules={[Navigation, Pagination, Autoplay, A11y]}
+          modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={20}
           slidesPerView={1}
           breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
@@ -108,7 +117,7 @@ const Dashboard = () => {
                   src={img.src}
                   alt={img.alt}
                   loading="lazy"
-                  className="w-full h-64 sm:h-52 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                   <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">

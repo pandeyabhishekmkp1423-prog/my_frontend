@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -14,8 +15,10 @@ export const CartProvider = ({ children }) => {
           c.service === item.service ? { ...c, quantity: c.quantity + 1 } : c
         )
       );
+      toast.success(`Increased ${item.service} quantity`);
     } else {
       setCart((prev) => [...prev, { ...item, quantity: 1 }]);
+      toast.success(`${item.service} added to cart`);
     }
   };
 
@@ -26,9 +29,13 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const removeFromCart = (service) => setCart((prev) => prev.filter((c) => c.service !== service));
+  const removeFromCart = (service) =>
+    setCart((prev) => prev.filter((c) => c.service !== service));
+
   const clearCart = () => setCart([]);
-  const getCartTotal = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  const getCartTotal = () =>
+    cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <CartContext.Provider
