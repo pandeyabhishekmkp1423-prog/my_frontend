@@ -1,8 +1,10 @@
 // src/component/PickupInfo.jsx
 import React, { useState } from "react";
-import API from "../api"; // Make sure api.js has baseURL = "https://laundry-hamper.onrender.com/api"
+import { useCart } from "./CartContext";
+import API from "../api";
 
 const PickupInfo = () => {
+  const { cart, getCartTotal, clearCart } = useCart();
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -18,19 +20,33 @@ const PickupInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
+    if (cart.length === 0) {
+      setMessage("Your cart is empty. Add services first.");
+      return;
+    }
 
     try {
-      const res = await API.post("/pickup", form);
-      if (res.status === 201 || res.status === 200) {
-        setMessage("✅ Pickup scheduled successfully!");
-        setForm({ name: "", address: "", phone: "", date: "", time: "" });
-      } else {
-        setMessage("❌ Failed to schedule pickup. Try again.");
-      }
+      const res = await API.post("/orders", {
+        customer: form.name,
+        phone: form.phone,
+        address: form.address,
+        pickupDate: form.date,
+        pickupTime: form.time,
+        items: cart.map((item) => ({
+          service: item.service,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        total: getCartTotal(),
+      });
+
+      setMessage("✅ Pickup scheduled successfully!");
+      clearCart();
+      setForm({ name: "", address: "", phone: "", date: "", time: "" });
+      console.log("Order Response:", res.data);
     } catch (err) {
-      console.error(err);
-      setMessage("❌ Cannot connect to backend.");
+      console.error("Order Error:", err.response?.data || err.message);
+      setMessage("❌ Failed to schedule pickup. Please try again.");
     }
   };
 
@@ -43,7 +59,10 @@ const PickupInfo = () => {
         Fill in the details below and our team will pick up your laundry at your convenience.
       </p>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
         <input
           type="text"
           name="name"
@@ -99,7 +118,7 @@ const PickupInfo = () => {
       </form>
 
       {message && (
-        <p className="mt-4 text-center text-green-600 font-medium">{message}</p>
+        <p className="mt-4 text-center font-medium text-green-600">{message}</p>
       )}
     </section>
   );

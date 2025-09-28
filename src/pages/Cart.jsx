@@ -47,7 +47,6 @@ const Cart = () => {
                     <button
                       onClick={() => updateQuantity(item.service, item.quantity - 1)}
                       className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full hover:bg-gray-300"
-                      disabled={item.quantity <= 1}
                     >
                       -
                     </button>
