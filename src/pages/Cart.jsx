@@ -1,10 +1,10 @@
+// src/component/Cart.jsx
 import React from "react";
 import { useCart } from "./CartContext";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } =
-    useCart();
+  const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
 
   if (!cart || cart.length === 0) {
     return (
@@ -26,7 +26,6 @@ const Cart = () => {
         Your Cart
       </h2>
 
-      {/* Table Wrapper for horizontal scroll */}
       <div className="overflow-x-auto">
         <table className="min-w-[600px] w-full table-auto border-collapse shadow-md rounded-lg overflow-hidden">
           <thead className="bg-blue-50">
@@ -40,10 +39,7 @@ const Cart = () => {
           </thead>
           <tbody>
             {cart.map((item) => (
-              <tr
-                key={item.service}
-                className="border-b hover:bg-gray-50 transition-all"
-              >
+              <tr key={item.service} className="border-b hover:bg-gray-50 transition-all">
                 <td className="py-3 px-4 font-medium text-gray-800">{item.service}</td>
                 <td className="py-3 px-4 text-gray-600">₹{item.price}</td>
                 <td className="py-3 px-4 text-center">
@@ -51,6 +47,7 @@ const Cart = () => {
                     <button
                       onClick={() => updateQuantity(item.service, item.quantity - 1)}
                       className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full hover:bg-gray-300"
+                      disabled={item.quantity <= 1}
                     >
                       -
                     </button>
@@ -80,7 +77,6 @@ const Cart = () => {
         </table>
       </div>
 
-      {/* Total & Actions */}
       <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
         <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
           Total: ₹{getCartTotal()}

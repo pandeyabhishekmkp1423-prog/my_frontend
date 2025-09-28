@@ -18,17 +18,16 @@ const Login = () => {
     e.preventDefault();
     setMessage("");
 
-    // Simple frontend validation
     if (!form.email || !form.password) {
       setMessage("❌ Please fill in all fields");
       return;
     }
 
     try {
-      const res = await fetch("https://laundry-hamper.onrender.com/login", {
+      const res = await fetch("https://laundry-hamper.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ email: form.email, password: form.password }),
       });
 
       const data = await res.json();
@@ -64,7 +63,6 @@ const Login = () => {
             className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}

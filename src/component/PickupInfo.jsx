@@ -1,5 +1,6 @@
 // src/component/PickupInfo.jsx
 import React, { useState } from "react";
+import API from "../api"; // Make sure api.js has baseURL = "https://laundry-hamper.onrender.com/api"
 
 const PickupInfo = () => {
   const [form, setForm] = useState({
@@ -15,11 +16,22 @@ const PickupInfo = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("✅ Pickup scheduled successfully!"); 
-    // Here you can integrate your backend API for scheduling
-    setForm({ name: "", address: "", phone: "", date: "", time: "" });
+    setMessage("");
+
+    try {
+      const res = await API.post("/pickup", form);
+      if (res.status === 201 || res.status === 200) {
+        setMessage("✅ Pickup scheduled successfully!");
+        setForm({ name: "", address: "", phone: "", date: "", time: "" });
+      } else {
+        setMessage("❌ Failed to schedule pickup. Try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("❌ Cannot connect to backend.");
+    }
   };
 
   return (
@@ -31,10 +43,7 @@ const PickupInfo = () => {
         Fill in the details below and our team will pick up your laundry at your convenience.
       </p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-      >
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="text"
           name="name"

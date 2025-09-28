@@ -1,11 +1,6 @@
-import React, { useState, useContext } from "react";
-import { OrdersContext } from "../pages/OrdersContext";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 const PickupForm = () => {
-  const { addOrder } = useContext(OrdersContext);
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,21 +8,41 @@ const PickupForm = () => {
     date: "",
     items: "",
   });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newOrder = {
-      ...formData,
-      id: Date.now(),
-      items: formData.items.split(",").map((item) => item.trim()),
-    };
-    addOrder(newOrder);
-    alert("Order placed successfully!");
-    navigate("/orders");
+    setMessage("");
+
+    if (!formData.name || !formData.email || !formData.address || !formData.date || !formData.items) {
+      setMessage("❌ Please fill in all fields");
+      return;
+    }
+
+    try {
+      const res = await fetch("https://laundry-hamper.onrender.com/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          items: formData.items.split(",").map((item) => item.trim())
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("✅ " + data.message);
+        setFormData({ name: "", email: "", address: "", date: "", items: "" });
+      } else {
+        setMessage("❌ " + data.message);
+      }
+    } catch (err) {
+      setMessage("❌ Cannot connect to backend");
+    }
   };
 
   return (
@@ -83,12 +98,15 @@ const PickupForm = () => {
           required
           className="w-full p-3 sm:p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-3 sm:py-4 rounded-full hover:bg-blue-700 transition text-lg sm:text-xl font-medium"
         >
           Place Order
         </button>
+
+        {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
       </form>
     </div>
   );

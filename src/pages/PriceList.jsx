@@ -1,36 +1,44 @@
-import React from "react";
+// src/component/PriceList.jsx
+import React, { useEffect, useState } from "react";
 import { useCart } from "./CartContext";
-import { FaTshirt, FaShoePrints, FaBed, FaCouch, FaHandSparkles, FaShoppingCart } from "react-icons/fa";
-
-const servicesData = [
-  {
-    category: "Laundry Services",
-    id: "laundry",
-    items: [
-      { service: "Wash & Fold", price: 50, icon: <FaTshirt className="text-blue-600 text-4xl" />, description: "Professional washing and folding." },
-      { service: "Ironing", price: 30, icon: <FaTshirt className="text-blue-600 text-4xl" />, description: "Crisp ironing for polished look." },
-      { service: "Dry Cleaning", price: 100, icon: <FaHandSparkles className="text-blue-600 text-4xl" />, description: "Expert cleaning for delicate garments." },
-      { service: "Stain Removal", price: 70, icon: <FaHandSparkles className="text-blue-600 text-4xl" />, description: "Specialized treatment for tough stains." },
-      { service: "Shoe Cleaning", price: 80, icon: <FaShoePrints className="text-blue-600 text-4xl" />, description: "Thorough cleaning and polishing for shoes." },
-    ],
-  },
-  {
-    category: "Home Textiles",
-    id: "home",
-    items: [
-      { service: "Bed Sheet Wash", price: 120, icon: <FaBed className="text-blue-600 text-4xl" />, description: "Deep wash and fresh fold for bed sheets." },
-      { service: "Sofa Cleaning", price: 350, icon: <FaCouch className="text-blue-600 text-4xl" />, description: "Expert cleaning for sofas and upholstery." },
-    ],
-  },
-];
+import API from "../api"; // ensure your api.js exports axios with baseURL
+import { FaTshirt, FaShoePrints, FaBed, FaCouch, FaHandSparkles } from "react-icons/fa";
 
 const PriceList = () => {
   const { addToCart, updateQuantity, cart } = useCart();
+  const [servicesData, setServicesData] = useState([]);
+  const [error, setError] = useState("");
+
+  // Fetch services from backend
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await API.get("/services"); // fetch from backend
+        setServicesData(res.data);
+      } catch (err) {
+        console.error("❌ Failed to fetch services:", err);
+        setError("Failed to load services. Please try again later.");
+      }
+    };
+    fetchServices();
+  }, []);
 
   const getQuantity = (service) => {
     const item = cart.find((c) => c.service === service);
     return item ? item.quantity : 0;
   };
+
+  const getServiceIcon = (serviceName) => {
+    if (serviceName.includes("Wash")) return <FaTshirt className="text-blue-600 text-4xl" />;
+    if (serviceName.includes("Shoe")) return <FaShoePrints className="text-blue-600 text-4xl" />;
+    if (serviceName.includes("Bed")) return <FaBed className="text-blue-600 text-4xl" />;
+    if (serviceName.includes("Sofa")) return <FaCouch className="text-blue-600 text-4xl" />;
+    return <FaHandSparkles className="text-blue-600 text-4xl" />;
+  };
+
+  if (error) {
+    return <p className="text-center text-red-600 mt-8">{error}</p>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -40,8 +48,11 @@ const PriceList = () => {
           <h2 className="text-2xl font-semibold mb-6">{category.category}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {category.items.map((item) => (
-              <div key={item.service} className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-2 flex flex-col items-center text-center">
-                <div className="mb-4">{item.icon}</div>
+              <div
+                key={item.service}
+                className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-2 flex flex-col items-center text-center"
+              >
+                <div className="mb-4">{getServiceIcon(item.service)}</div>
                 <h3 className="text-xl font-semibold mb-2">{item.service}</h3>
                 <p className="text-gray-600 mb-4">{item.description}</p>
                 <div className="flex items-center gap-2 mt-auto">

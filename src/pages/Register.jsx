@@ -24,7 +24,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("https://laundry-hamper.onrender.com/register", {
+      const res = await fetch("https://laundry-hamper.onrender.com/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
