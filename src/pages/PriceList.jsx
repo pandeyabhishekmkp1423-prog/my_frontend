@@ -13,7 +13,7 @@ const PriceList = () => {
     const fetchServices = async () => {
       try {
         const res = await API.get("/services");
-        setServicesData(res.data); // flat array
+        setServicesData(res.data); // flat array from backend
       } catch (err) {
         console.error("❌ Failed to fetch services:", err);
         setError("Failed to load services. Please try again later.");
@@ -42,7 +42,10 @@ const PriceList = () => {
       <h1 className="text-3xl font-bold text-center mb-8">Our Premium Services</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {servicesData.map((item) => (
-          <div key={item._id} className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-2 flex flex-col items-center text-center">
+          <div
+            key={item._id}
+            className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition transform hover:-translate-y-2 flex flex-col items-center text-center"
+          >
             <div className="mb-4">{getServiceIcon(item.name)}</div>
             <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
             <p className="text-gray-600 mb-4">{item.description}</p>
