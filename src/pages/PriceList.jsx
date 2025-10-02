@@ -12,8 +12,8 @@ const PriceList = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await API.get("/services");
-        setServicesData(res.data); // flat array from backend
+        const res = await API.get("/services"); // ✅ goes to /api/services
+        setServicesData(res.data); 
       } catch (err) {
         console.error("❌ Failed to fetch services:", err);
         setError("Failed to load services. Please try again later.");
