@@ -1,71 +1,60 @@
 // src/App.jsx
 import React, { Suspense } from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Regular imports
-import Dashboard from "./pages/Dashboard";
-import PriceList from "./pages/PriceList";
+// Components
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 import LoadingSpinner from "./component/LoadingSpinner";
 import CartIcon from "./component/CartIcon";
 
-// Context providers
+// Pages
+import Dashboard from "./pages/Dashboard";
+import PriceList from "./pages/PriceList";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ManageOrders from "./pages/admin/ManageOrders";
+import ManageServices from "./pages/admin/ManageServices";
+
+// Contexts
 import { CartProvider } from "./pages/CartContext";
-import { OrdersProvider } from "./pages/OrdersContext";
 
-// Lazy-loaded pages
-const LearnMore = React.lazy(() => import("./pages/LearnMore"));
-const Contact = React.lazy(() => import("./pages/Contact"));
-const About = React.lazy(() => import("./pages/About"));
-const CartPage = React.lazy(() => import("./pages/Cart"));
-const Checkout = React.lazy(() => import("./pages/Checkout"));
-const Login = React.lazy(() => import("./pages/Login"));
-const Register = React.lazy(() => import("./pages/Register"));
-const Orders = React.lazy(() => import("./pages/Orders"));
-const PickupForm = React.lazy(() => import("./component/PickupForm")); // Added PickupForm
-
-// Layout component
-const Layout = () => (
-  <div className="min-h-screen flex flex-col relative">
-    <Header />
-    <main className="flex-grow">
-      <Suspense fallback={<LoadingSpinner />}>
-        <Outlet />
-      </Suspense>
-    </main>
-    <Footer />
-    <CartIcon /> {/* Floating cart icon */}
-  </div>
-);
-
-// Router setup
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      { index: true, element: <Dashboard /> },
-      { path: "price", element: <PriceList /> },
-      { path: "contact", element: <Contact /> },
-      { path: "about", element: <About /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "checkout", element: <Checkout /> },
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-      { path: "learn-more", element: <LearnMore /> },
-      { path: "orders", element: <Orders /> },
-      { path: "pickup-form", element: <PickupForm /> }, // PickupForm route
-    ],
-  },
-]);
-
-export default function App() {
+function App() {
   return (
     <CartProvider>
-      <OrdersProvider>
-        <RouterProvider router={router} />
-      </OrdersProvider>
+      <BrowserRouter>
+        <Header />
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/price" element={<PriceList />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/orders" element={<ManageOrders />} />
+            <Route path="/admin/services" element={<ManageServices />} />
+
+            {/* Fallback */}
+            <Route path="*" element={<div className="p-8 text-center">Page Not Found</div>} />
+          </Routes>
+        </Suspense>
+        <CartIcon />
+        <Footer />
+      </BrowserRouter>
     </CartProvider>
   );
 }
+
+export default App;
