@@ -1,8 +1,12 @@
-// src/pages/admin/AdminDashboard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    window.location.href = "/admin/login";
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gray-50">
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
@@ -27,6 +31,14 @@ const AdminDashboard = () => {
         >
           Manage Services
         </Link>
+      </div>
+      <div className="text-center mt-8">
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

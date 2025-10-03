@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -17,13 +16,24 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 // Admin Pages
+import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageOrders from "./pages/admin/ManageOrders";
 import ManageServices from "./pages/admin/ManageServices";
 
-// Contexts
+// Context
 import { CartProvider } from "./pages/CartContext";
+
+// Admin Route wrapper
+const AdminRoute = ({ children }) => {
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    window.location.href = "/admin/login";
+    return null;
+  }
+  return children;
+};
 
 function App() {
   return (
@@ -32,7 +42,7 @@ function App() {
         <Header />
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-            {/* Public Routes */}
+            {/* Public */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/price" element={<PriceList />} />
             <Route path="/contact" element={<Contact />} />
@@ -40,11 +50,40 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<ManageUsers />} />
-            <Route path="/admin/orders" element={<ManageOrders />} />
-            <Route path="/admin/services" element={<ManageServices />} />
+            {/* Admin */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <AdminRoute>
+                  <ManageUsers />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/orders"
+              element={
+                <AdminRoute>
+                  <ManageOrders />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/services"
+              element={
+                <AdminRoute>
+                  <ManageServices />
+                </AdminRoute>
+              }
+            />
 
             {/* Fallback */}
             <Route path="*" element={<div className="p-8 text-center">Page Not Found</div>} />
