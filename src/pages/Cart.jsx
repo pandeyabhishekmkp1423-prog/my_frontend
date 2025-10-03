@@ -1,4 +1,4 @@
-// src/component/Cart.jsx
+// src/pages/Cart.jsx
 import React from "react";
 import { useCart } from "./CartContext";
 import { Link } from "react-router-dom";
@@ -77,9 +77,7 @@ const Cart = () => {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
-          Total: ₹{getCartTotal()}
-        </h3>
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Total: ₹{getCartTotal()}</h3>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
           <button
             onClick={clearCart}

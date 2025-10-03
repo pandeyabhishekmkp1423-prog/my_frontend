@@ -7,18 +7,24 @@ import { FaTshirt, FaShoePrints, FaBed, FaCouch, FaHandSparkles } from "react-ic
 const PriceList = () => {
   const { addToCart, updateQuantity, cart } = useCart();
   const [servicesData, setServicesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const fetchServices = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await API.get("/services");
+      setServicesData(res.data);
+    } catch (err) {
+      console.error("❌ Failed to fetch services:", err);
+      setError("⚠️ Couldn’t load services. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await API.get("/services"); // ✅ goes to /api/services
-        setServicesData(res.data); 
-      } catch (err) {
-        console.error("❌ Failed to fetch services:", err);
-        setError("Failed to load services. Please try again later.");
-      }
-    };
     fetchServices();
   }, []);
 
@@ -35,7 +41,47 @@ const PriceList = () => {
     return <FaHandSparkles className="text-blue-600 text-4xl" />;
   };
 
-  if (error) return <p className="text-center text-red-600 mt-8">{error}</p>;
+  // 🔹 Skeleton Loader Component
+  const SkeletonCard = () => (
+    <div className="bg-white p-6 rounded-xl shadow animate-pulse flex flex-col items-center text-center">
+      <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
+      <div className="h-4 w-32 bg-gray-200 mb-2 rounded"></div>
+      <div className="h-3 w-20 bg-gray-200 mb-4 rounded"></div>
+      <div className="flex items-center gap-2 mt-auto">
+        <div className="h-8 w-8 bg-gray-200 rounded"></div>
+        <div className="h-6 w-10 bg-gray-200 rounded"></div>
+        <div className="h-8 w-8 bg-gray-200 rounded"></div>
+        <div className="h-4 w-12 bg-gray-200 rounded"></div>
+      </div>
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+        <h1 className="text-3xl font-bold text-center mb-8">Our Premium Services</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array(6).fill(0).map((_, idx) => (
+            <SkeletonCard key={idx} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+        <p className="text-red-600 font-semibold mb-4">{error}</p>
+        <button
+          onClick={fetchServices}
+          className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          🔄 Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">

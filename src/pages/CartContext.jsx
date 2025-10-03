@@ -1,3 +1,4 @@
+// src/pages/CartContext.jsx
 import React, { createContext, useContext, useState } from "react";
 import toast from "react-hot-toast";
 

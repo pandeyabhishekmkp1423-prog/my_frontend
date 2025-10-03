@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -14,6 +15,9 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import LearnMore from "./pages/LearnMore";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -42,15 +46,18 @@ function App() {
         <Header />
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-            {/* Public */}
+            {/* Public Routes */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/price" element={<PriceList />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/learn-more" element={<LearnMore />} />
 
-            {/* Admin */}
+            {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin"
@@ -86,7 +93,14 @@ function App() {
             />
 
             {/* Fallback */}
-            <Route path="*" element={<div className="p-8 text-center">Page Not Found</div>} />
+            <Route
+              path="*"
+              element={
+                <div className="p-8 text-center text-red-600 text-xl">
+                  Page Not Found
+                </div>
+              }
+            />
           </Routes>
         </Suspense>
         <CartIcon />
